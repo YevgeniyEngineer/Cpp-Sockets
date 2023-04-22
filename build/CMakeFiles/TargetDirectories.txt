@@ -1,4 +1,0 @@
-/home/yevgeniy/Documents/GitHub/Cpp-Sockets/build/CMakeFiles/udp_client.dir
-/home/yevgeniy/Documents/GitHub/Cpp-Sockets/build/CMakeFiles/udp_server.dir
-/home/yevgeniy/Documents/GitHub/Cpp-Sockets/build/CMakeFiles/edit_cache.dir
-/home/yevgeniy/Documents/GitHub/Cpp-Sockets/build/CMakeFiles/rebuild_cache.dir
