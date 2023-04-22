@@ -8,6 +8,8 @@
         "timer": "cpp",
         "socket": "cpp",
         "buffer": "cpp",
-        "internet": "cpp"
+        "internet": "cpp",
+        "functional": "cpp",
+        "cstring": "cpp"
     }
 }

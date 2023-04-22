@@ -1,4 +1,3 @@
-#include <arpa/inet.h>
 #include <chrono>
 #include <csignal>
 #include <cstdlib>
@@ -6,9 +5,14 @@
 #include <functional>
 #include <iostream>
 #include <string>
+
+extern "C"
+{
+#include <arpa/inet.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <unistd.h>
+}
 
 constexpr int PORT = 12345;
 constexpr int BUFFER_SIZE = 1024;

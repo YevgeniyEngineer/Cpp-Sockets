@@ -1,12 +1,16 @@
-#include <arpa/inet.h>
 #include <csignal>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <iostream>
 #include <string>
+
+extern "C"
+{
+#include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
+}
 
 constexpr const char *SERVER_IP = "127.0.0.1";
 constexpr int PORT = 12345;
