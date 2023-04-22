@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "cstdlib": "cpp",
+        "iostream": "cpp",
+        "string": "cpp",
+        "net": "cpp",
+        "io_context": "cpp",
+        "timer": "cpp",
+        "socket": "cpp",
+        "buffer": "cpp",
+        "internet": "cpp"
+    }
+}

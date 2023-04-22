@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/yevgeniy/Documents/GitHub/Cpp-Sockets/build",
+  "command": "/usr/bin/g++ -O2 -g -DNDEBUG -o CMakeFiles/udp_client.dir/udp_client.cpp.o -c /home/yevgeniy/Documents/GitHub/Cpp-Sockets/udp_client.cpp",
+  "file": "/home/yevgeniy/Documents/GitHub/Cpp-Sockets/udp_client.cpp"
+},
+{
+  "directory": "/home/yevgeniy/Documents/GitHub/Cpp-Sockets/build",
+  "command": "/usr/bin/g++ -O2 -g -DNDEBUG -o CMakeFiles/udp_server.dir/udp_server.cpp.o -c /home/yevgeniy/Documents/GitHub/Cpp-Sockets/udp_server.cpp",
+  "file": "/home/yevgeniy/Documents/GitHub/Cpp-Sockets/udp_server.cpp"
+}
+]
