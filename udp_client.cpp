@@ -14,8 +14,6 @@ extern "C"
 
 constexpr const char *SERVER_IP = "127.0.0.1";
 constexpr int PORT = 12345;
-constexpr int BUFFER_SIZE = 1024;
-constexpr int MAX_RETRIES = 3;
 
 // Define SignalHandler as a function taking an integer as an argument.
 using SignalHandler = std::function<void(int)>;
@@ -72,8 +70,6 @@ int main(int argc, const char **argv)
 
     // Read messages from standard input and send them to the server.
     std::string message;
-    char buffer[BUFFER_SIZE];
-
     while (std::getline(std::cin, message))
     {
         sendto(sock, message.c_str(), message.length(), 0, (sockaddr *)&server_addr, sizeof(server_addr));
