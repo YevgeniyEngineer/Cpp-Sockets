@@ -1,9 +1,11 @@
+#include <chrono>
 #include <csignal>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <iostream>
 #include <string>
+#include <thread>
 
 extern "C"
 {
@@ -14,13 +16,11 @@ extern "C"
 
 constexpr const char *SERVER_IP = "127.0.0.1";
 constexpr int PORT = 12345;
-constexpr int BUFFER_SIZE = 1024;
 constexpr int MAX_RETRIES = 3;
+constexpr int RETRY_INTERVAL = 1; // Retry interval in seconds
 
-// Define SignalHandler as a function taking an integer as an argument.
 using SignalHandler = std::function<void(int)>;
 
-// Signal handling wrapper function to set the correct handler function.
 void signal_handler_wrapper(int signal_number, siginfo_t *info, void *context)
 {
     static SignalHandler handler;
@@ -34,7 +34,6 @@ void signal_handler_wrapper(int signal_number, siginfo_t *info, void *context)
     }
 }
 
-// Function to install the custom signal handler.
 void install_signal_handler(int signal_number, SignalHandler handler)
 {
     struct sigaction action;
@@ -48,38 +47,51 @@ void install_signal_handler(int signal_number, SignalHandler handler)
 
 int main(int argc, const char **argv)
 {
-    // Create a UDP socket.
-    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0)
     {
         std::cerr << "Socket creation failed." << std::endl;
         return EXIT_FAILURE;
     }
 
-    // Install signal handler for SIGINT to close the socket and exit the application.
     install_signal_handler(SIGINT, [&sock](int signal_number) {
         std::cout << "Received signal " << signal_number << ", terminating..." << std::endl;
         close(sock);
         exit(signal_number);
     });
 
-    // Set up the server address.
     sockaddr_in server_addr;
     std::memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT);
     inet_pton(AF_INET, SERVER_IP, &server_addr.sin_addr);
 
-    // Read messages from standard input and send them to the server.
-    std::string message;
-    char buffer[BUFFER_SIZE];
-
-    while (std::getline(std::cin, message))
+    int retries = 0;
+    while (retries < MAX_RETRIES)
     {
-        sendto(sock, message.c_str(), message.length(), 0, (sockaddr *)&server_addr, sizeof(server_addr));
+        if (connect(sock, (sockaddr *)&server_addr, sizeof(server_addr)) == 0)
+        {
+            break;
+        }
+
+        ++retries;
+        std::cout << "Connection failed, retrying (" << retries << " of " << MAX_RETRIES << ")..." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(RETRY_INTERVAL));
     }
 
-    // Close the socket and exit the application.
+    if (retries == MAX_RETRIES)
+    {
+        std::cerr << "Failed to connect after " << MAX_RETRIES << " retries. Giving up." << std::endl;
+        close(sock);
+        return EXIT_FAILURE;
+    }
+
+    std::string message;
+    while (std::getline(std::cin, message))
+    {
+        send(sock, message.c_str(), message.length(), 0);
+    }
+
     close(sock);
     return EXIT_SUCCESS;
 }
